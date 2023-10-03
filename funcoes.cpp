@@ -91,3 +91,48 @@ ProblemaCondicoes* leArquivo(std::string nomeArquivo){
     arquivo.close();
     return condicoes;
 }
+
+Solucao* criaSolucao(){
+    Solucao* solucao = new Solucao();
+
+    solucao->setCustoRoteamento(23);
+    solucao->setCustoVeiculos(10);
+    solucao->setCustoTerceirizacao(3);
+    solucao->setClientesTerceirizados(std::vector<int>{6});
+    solucao->setNumeroRotas(2);
+    solucao->setRotas(std::vector<std::vector<int>>{ {1,2}, {3,4,5} });
+
+    return solucao;
+}
+
+bool escreveArquivo(std::string arquivoDestino, Solucao* solucao){
+    std::ofstream arquivo(arquivoDestino);
+
+    if(!arquivo.is_open()){
+        std::cout << "Problema ao escrever no arquivo!";
+        return false;
+    }
+
+    arquivo << solucao->getValorSolucao() << std::endl;
+    arquivo << solucao->getCustoRoteamento() << std::endl;
+    arquivo << solucao->getCustoVeiculos() << std::endl;
+    arquivo << solucao->getCustoTerceirizacao() << std::endl;
+    arquivo << std::endl;
+
+    for(int i : solucao->getClientesTerceirizados()){
+        arquivo << i << " ";
+    }
+
+    arquivo << std::endl;
+    arquivo << std::endl;
+
+    arquivo << solucao->getNumeroRotas();
+    for(std::vector<int> temp : solucao->getRotas()){
+        arquivo << std::endl;
+        for(int i: temp){
+            arquivo << i << " ";
+        }
+    }
+
+    return true;
+}

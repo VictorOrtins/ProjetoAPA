@@ -17,6 +17,8 @@ class ProblemaCondicoes {
         std::vector<std::vector<int>> c; // Custo associado a um caminho
 
     public:
+
+        ProblemaCondicoes();
         // Getters
         int getN() const;
 

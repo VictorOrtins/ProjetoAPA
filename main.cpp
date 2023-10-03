@@ -1,5 +1,6 @@
 #include "ProblemaCondicoes.hpp"
 #include "funcoes.hpp"
+#include "Solucao.hpp"
 
 int main(int argc, char* argv[]){
     ProblemaCondicoes* condicoes = leArquivo("instancia.txt");
@@ -8,6 +9,13 @@ int main(int argc, char* argv[]){
     }
 
     condicoes->printaObjeto();
+
+    Solucao* solucao = criaSolucao();
+
+    escreveArquivo("final.txt", solucao);
+
+    delete condicoes;
+    delete solucao;
 }
 
 

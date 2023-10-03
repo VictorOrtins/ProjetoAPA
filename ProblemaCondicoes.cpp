@@ -1,5 +1,13 @@
 #include "ProblemaCondicoes.hpp"
 
+ProblemaCondicoes::ProblemaCondicoes(){
+    this->n = 0;
+    this->k = 0;
+    this->Q = 0;
+    this->L = 0;
+    this->r = 0;
+}
+
 int ProblemaCondicoes::getN() const {
     return n;
 }
