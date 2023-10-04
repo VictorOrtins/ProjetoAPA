@@ -6,51 +6,51 @@
 
 class ProblemaCondicoes {
     private:
-        int n; // Total de Entregas. Logo, é também o total de vértices que receberão entregas. O total de vértices
+        int totalEntregas; // Total de Entregas. Logo, é também o total de vértices que receberão entregas. O total de vértices
         //é n+1, já que é preciso considerar também o depósito como vértice
-        int k; // Total de Veículos
-        int Q; // Capacidade de cada Veículo
-        int L; // Mínimo de Entregas sem terceirização
-        int r; // Custo da utilização de um carro para a empresa
-        std::vector<int> d; // Demanda dos clientes por cada entrega
-        std::vector<int> p; // Custos de terceirização para cada vértice
-        std::vector<std::vector<int>> c; // Custo associado a um caminho
+        int totalVeiculos; // Total de Veículos
+        int capacidadeVeiculo; // Capacidade de cada Veículo
+        int minimoEntregas; // Mínimo de Entregas sem terceirização
+        int custoCarro; // Custo da utilização de um carro para a empresa
+        std::vector<int> demandaClientes; // Demanda dos clientes por cada entrega
+        std::vector<int> custoTerceirizacao; // Custos de terceirização para cada vértice
+        std::vector<std::vector<int>> custoCaminho; // Custo associado a um caminho
 
     public:
 
         ProblemaCondicoes();
         // Getters
-        int getN() const;
+        int getTotalEntregas() const;
 
-        int getK() const;
+        int getTotalVeiculos() const;
 
-        int getQ() const;
+        int getCapacidadeVeiculo() const;
 
-        int getL() const;
+        int getMinimoEntregas() const;
 
-        int getR() const;
+        int getCustoCarro() const;
 
-        std::vector<int> getD() const;
+        std::vector<int> getDemandaClientes() const;
 
-        std::vector<int> getP() const;
+        std::vector<int> getCustoTerceirizacao() const;
 
-        std::vector<std::vector<int>> getC() const;
+        std::vector<std::vector<int>> getCustoCaminho() const;
         // Setters
-        void setN(int n);
+        void setTotalEntregas(int n);
 
-        void setK(int k);
+        void setTotalVeiculos(int k);
 
-        void setQ(int Q);
+        void setCapacidadeVeiculo(int Q);
 
-        void setL(int L);
+        void setMinimoEntregas(int L);
 
-        void setR(int r);
+        void setCustoCarro(int r);
 
-        void setD(const std::vector<int>& d);
+        void setDemandaClientes(const std::vector<int>& d);
 
-        void setP(const std::vector<int>& p);
+        void setCustoTerceirizacao(const std::vector<int>& p);
 
-        void setC(const std::vector<std::vector<int>>& c);
+        void setCustoCaminho(const std::vector<std::vector<int>>& c);
 
         void printaObjeto();
 };

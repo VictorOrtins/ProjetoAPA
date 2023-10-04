@@ -1,103 +1,102 @@
 #include "ProblemaCondicoes.hpp"
 
 ProblemaCondicoes::ProblemaCondicoes(){
-    this->n = 0;
-    this->k = 0;
-    this->Q = 0;
-    this->L = 0;
-    this->r = 0;
+    this->totalEntregas = 0;
+    this->totalVeiculos = 0;
+    this->capacidadeVeiculo = 0;
+    this->minimoEntregas = 0;
+    this->custoCarro = 0;
 }
 
-int ProblemaCondicoes::getN() const {
-    return n;
+int ProblemaCondicoes::getTotalEntregas() const {
+    return totalEntregas;
 }
 
-int ProblemaCondicoes::getK() const {
-    return k;
+int ProblemaCondicoes::getTotalVeiculos() const {
+    return totalVeiculos;
 }
 
-int ProblemaCondicoes::getQ() const {
-    return Q;
+int ProblemaCondicoes::getCapacidadeVeiculo() const {
+    return capacidadeVeiculo;
 }
 
-int ProblemaCondicoes::getL() const {
-    return L;
+int ProblemaCondicoes::getMinimoEntregas() const {
+    return minimoEntregas;
 }
 
-int ProblemaCondicoes::getR() const {
-    return r;
+int ProblemaCondicoes::getCustoCarro() const {
+    return custoCarro;
 }
 
-std::vector<int> ProblemaCondicoes::getD() const {
-    return d;
+std::vector<int> ProblemaCondicoes::getDemandaClientes() const {
+    return demandaClientes;
 }
 
-std::vector<int> ProblemaCondicoes::getP() const {
-    return p;
+std::vector<int> ProblemaCondicoes::getCustoTerceirizacao() const {
+    return custoTerceirizacao;
 }
 
-std::vector<std::vector<int>> ProblemaCondicoes::getC() const {
-    return c;
+std::vector<std::vector<int>> ProblemaCondicoes::getCustoCaminho() const {
+    return custoCaminho;
 }
 
 // Setters
-void ProblemaCondicoes::setN(int n) {
-    this->n = n;
+void ProblemaCondicoes::setTotalEntregas(int n) {
+    this->totalEntregas = n;
 }
 
-void ProblemaCondicoes::setK(int k) {
-    this->k = k;
+void ProblemaCondicoes::setTotalVeiculos(int k) {
+    this->totalVeiculos = k;
 }
 
-void ProblemaCondicoes::setQ(int Q) {
-    this->Q = Q;
+void ProblemaCondicoes::setCapacidadeVeiculo(int Q) {
+    this->capacidadeVeiculo = Q;
 }
 
-void ProblemaCondicoes::setL(int L) {
-    this->L = L;
+void ProblemaCondicoes::setMinimoEntregas(int L) {
+    this->minimoEntregas = L;
 }
 
-void ProblemaCondicoes::setR(int r) {
-    this->r = r;
+void ProblemaCondicoes::setCustoCarro(int r) {
+    this->custoCarro = r;
 }
 
-void ProblemaCondicoes::setD(const std::vector<int>& d) {
-    this->d = d;
+void ProblemaCondicoes::setDemandaClientes(const std::vector<int>& d) {
+    this->demandaClientes = d;
 }
 
-void ProblemaCondicoes::setP(const std::vector<int>& p) {
-    this->p = p;
+void ProblemaCondicoes::setCustoTerceirizacao(const std::vector<int>& p) {
+    this->custoTerceirizacao = p;
 }
 
-void ProblemaCondicoes::setC(const std::vector<std::vector<int>>& c) {
-    this->c = c;
+void ProblemaCondicoes::setCustoCaminho(const std::vector<std::vector<int>>& c) {
+    this->custoCaminho = c;
 }
 
 void ProblemaCondicoes::printaObjeto(){
-    std::cout << "n: " << n << "\n";
-    std::cout << "k: " << k << "\n";
-    std::cout << "Q: " << Q << "\n";
-    std::cout << "L: " << L << "\n";
-    std::cout << "r: " << r << "\n";
+    std::cout << "Total de Entregas: " << totalEntregas << "\n";
+    std::cout << "Total de Veiculos: " << totalVeiculos << "\n";
+    std::cout << "Capacidade de cada Veiculo: " << capacidadeVeiculo << "\n";
+    std::cout << "Minimo de Entregas sem terceirizar: " << minimoEntregas << "\n";
+    std::cout << "Custo de Utilizacao de cada Carro: " << custoCarro << "\n";
 
-    std::cout << "d: ";
-    for (int i : d){
+    std::cout << "Demanda dos clientes: ";
+    for (int i : demandaClientes){
         std::cout << i << " ";
     }
     std::cout << "\n";
 
-    std::cout << "p: ";
-    for (int i : p){
+    std::cout << "Custo de Terceirizacao: ";
+    for (int i : custoTerceirizacao){
         std::cout << i << " ";
     }
     std::cout << "\n";
 
-    std::cout << "c: ";
-    for (std::vector<int> i : c){
+    std::cout << "Custo de cada Caminho: ";
+    for (std::vector<int> i : custoCaminho){
         std::cout << "\n";
         for (int j : i){
             std::cout << j << " ";
         }
     }
-
 }

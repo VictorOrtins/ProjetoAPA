@@ -49,19 +49,19 @@ ProblemaCondicoes* leArquivo(std::string nomeArquivo){
 
     int temp;
     arquivo >> temp;
-    condicoes->setN(temp);
+    condicoes->setTotalEntregas(temp);
 
     arquivo >> temp;
-    condicoes->setK(temp);
+    condicoes->setTotalVeiculos(temp);
 
     arquivo >> temp;
-    condicoes->setQ(temp);
+    condicoes->setCapacidadeVeiculo(temp);
 
     arquivo >> temp;
-    condicoes->setL(temp);
+    condicoes->setMinimoEntregas(temp);
 
     arquivo >> temp;
-    condicoes->setR(temp);
+    condicoes->setCustoCarro(temp);
 
     std::string tempString;
     std::getline(arquivo, tempString);
@@ -69,24 +69,24 @@ ProblemaCondicoes* leArquivo(std::string nomeArquivo){
     std::getline(arquivo, tempString);
 
     std::vector<int> tempVector = split(tempString, ' ');
-    condicoes->setD(tempVector);
+    condicoes->setDemandaClientes(tempVector);
 
     std::getline(arquivo, tempString);
     std::getline(arquivo, tempString);
 
     tempVector = split(tempString, ' ');
-    condicoes->setP(tempVector);
+    condicoes->setCustoTerceirizacao(tempVector);
 
     std::vector<std::vector<int>> tempMatriz;
 
     std::getline(arquivo, tempString);
-    for (int i = 0; i < condicoes->getN() + 1; i++){
+    for (int i = 0; i < condicoes->getTotalEntregas() + 1; i++){
         std::getline(arquivo, tempString);
         tempVector = split(tempString, ' ');
         tempMatriz.push_back(tempVector);
     }
 
-    condicoes->setC(tempMatriz);
+    condicoes->setCustoCaminho(tempMatriz);
 
     arquivo.close();
     return condicoes;
