@@ -5,15 +5,16 @@
 
 class Solucao {
     private:
-        int valorSolucao;
-        int custoRoteamento;
-        int custoVeiculos;
-        int custoTerceirizacao;
-        std::vector<int> clientesTerceirizados;
-        int numeroRotas;
-        std::vector<std::vector<int>> rotas;
+        int valorSolucao; //Valor total da solução
+        int custoRoteamento; //Custo apenas das rotas
+        int custoVeiculos; //Custo da utilização dos veículos
+        int custoTerceirizacao; //Custo da terceirização dos vértices
+        std::vector<int> clientesTerceirizados; //Clientes que tiveram suas entregas terceirizadas
+        int numeroRotas; //Número de rotas utilizadas
+        std::vector<std::vector<int>> rotas; //Rotas utilizadas
 
-        void atualizaValorSolucao();
+        void atualizaValorSolucao(); //Atualiza o valor da solução sempre que setCustoRoteamento,
+        //setCustoVeiculos e setCustoTerceirizacao são chamados
 
     public:
         Solucao();
@@ -47,6 +48,7 @@ class Solucao {
 
         void printaSolucao();
 
+        //Adiciona uma rota nas rotas
         void addRota(std::vector<int> rota);
 
         
