@@ -30,11 +30,11 @@ class ProblemaCondicoes {
 
         int getCustoCarro() const;
 
-        std::vector<int> getDemandaClientes() const;
+        const std::vector<int>& getDemandaClientes() const;
 
-        std::vector<int> getCustoTerceirizacao() const;
+        const std::vector<int>& getCustoTerceirizacao() const;
 
-        std::vector<std::vector<int>> getCustoCaminho() const;
+        const std::vector<std::vector<int>>& getCustoCaminho() const;
         // Setters
         void setTotalEntregas(int n);
 

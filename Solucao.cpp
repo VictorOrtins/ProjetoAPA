@@ -24,7 +24,7 @@ int Solucao::getCustoTerceirizacao() const {
     return custoTerceirizacao;
 }
 
-std::vector<int> Solucao::getClientesTerceirizados() const {
+const std::vector<int>& Solucao::getClientesTerceirizados() const {
     return clientesTerceirizados;
 }
 
@@ -32,7 +32,7 @@ int Solucao::getNumeroRotas() const {
     return numeroRotas;
 }
 
-std::vector<std::vector<int>> Solucao::getRotas() const {
+const std::vector<std::vector<int>>& Solucao::getRotas() const {
     return rotas;
 }
 
@@ -68,6 +68,10 @@ void Solucao::setRotas(const std::vector<std::vector<int>>& rotas) {
 
 void Solucao::atualizaValorSolucao(){
     this->valorSolucao = this->custoRoteamento + this->custoTerceirizacao + this->custoVeiculos;
+}
+
+void Solucao::addRota(std::vector<int> rota){
+    this->rotas.push_back(rota);
 }
 
 void Solucao::printaSolucao(){

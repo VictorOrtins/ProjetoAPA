@@ -8,9 +8,9 @@ int main(int argc, char* argv[]){
         std::cout << "Problema na leitura do arquivo!\n";
     }
 
-    condicoes->printaObjeto();
+    Solucao* solucao = algoritmoGuloso(condicoes);
 
-    Solucao* solucao = criaSolucao();
+    solucao->printaSolucao();
 
     escreveArquivo("final.txt", solucao);
 

@@ -1,5 +1,5 @@
 #include "funcoes.hpp"
-#include <fstream>
+
 
 std::vector<int> split(const std::string& text, char sep)
 {
@@ -135,4 +135,116 @@ bool escreveArquivo(std::string arquivoDestino, Solucao* solucao){
     }
 
     return true;
+}
+
+Solucao* algoritmoGuloso(ProblemaCondicoes *condicoes){
+
+    Solucao* solucao = new Solucao();
+
+    const int INFINITO = std::numeric_limits<int>::max();
+
+    std::vector<std::vector<int>> custoCaminhos = condicoes->getCustoCaminho();
+    std::vector<int> demandas = condicoes->getDemandaClientes();
+
+    int capacidadeMaximaVeiculo = condicoes->getCapacidadeVeiculo();
+    int numRotas = condicoes->getTotalVeiculos();
+    std::vector<int> custoTerceirizar = condicoes->getCustoTerceirizacao();
+
+    std::vector<int> verticesRestantes;
+
+    for(int i = 1; i <= condicoes->getTotalEntregas(); i++){
+        verticesRestantes.push_back(i);
+    }
+
+    int verticeAtual = 0;
+    int rotaAtual = 0;
+
+    std::vector<int> capacidadeAtualRota;
+
+    for(int i = 0; i < numRotas; i++){
+        capacidadeAtualRota.push_back(0);
+    }
+
+    int custoAtualSolucao = 0;
+    int custoAtualTerceirizacao = 0;
+
+    std::vector<int> clientesTerceirizados;
+    std::vector<int> rota;
+
+    while(verticesRestantes.size() > 0){
+        std::cout << verticeAtual << " ";
+        std::vector<int> verticeCustos = custoCaminhos.at(verticeAtual);
+
+        if(capacidadeAtualRota.at(rotaAtual) == capacidadeMaximaVeiculo){
+            if(rotaAtual + 1 == numRotas){
+               for(int vertice : verticesRestantes){
+                    custoAtualTerceirizacao += custoTerceirizar.at(vertice - 1);
+                    clientesTerceirizados.push_back(vertice);
+                }
+                break;
+            }
+
+            custoAtualSolucao += verticeCustos.at(0);
+            verticeAtual = 0;
+            solucao->addRota(rota);
+            rota.clear();
+            rotaAtual++;
+            continue;
+        }
+
+        int verticeMenorCusto = -1;
+        int menorCusto = INFINITO;
+        
+
+        for(int vertice: verticesRestantes){
+            if(verticeCustos.at(vertice) < menorCusto && capacidadeAtualRota.at(rotaAtual) + demandas.at(vertice - 1) <= capacidadeMaximaVeiculo){
+                verticeMenorCusto = vertice;
+                menorCusto = verticeCustos.at(vertice);
+            }
+        }
+
+        if(menorCusto == INFINITO){
+            if(rotaAtual + 1 == numRotas){
+               for(int vertice : verticesRestantes){
+                    custoAtualTerceirizacao += custoTerceirizar.at(vertice - 1);
+                    clientesTerceirizados.push_back(vertice);
+                }
+                break;
+            }
+
+            custoAtualSolucao += verticeCustos.at(0);
+            verticeAtual = 0;
+            solucao->addRota(rota);
+            rota.clear();
+            rotaAtual++;
+            continue;
+        }
+
+        custoAtualSolucao += verticeCustos.at(verticeMenorCusto);
+        capacidadeAtualRota.at(rotaAtual) += demandas.at(verticeMenorCusto - 1);
+        rota.push_back(verticeMenorCusto);
+        verticeAtual = verticeMenorCusto;
+
+        for (auto it = verticesRestantes.begin(); it != verticesRestantes.end();) {
+            if (*it == verticeMenorCusto) {
+                verticesRestantes.erase(it);
+                break;
+            } else {
+                ++it;
+            }
+        }
+
+    }
+
+    custoAtualSolucao += custoCaminhos.at(verticeAtual).at(0);
+    capacidadeAtualRota.at(rotaAtual) += demandas.at(verticeAtual - 1);
+    solucao->addRota(rota);
+
+    solucao->setCustoRoteamento(custoAtualSolucao);
+    solucao->setCustoTerceirizacao(custoAtualTerceirizacao);
+    solucao->setCustoVeiculos( (rotaAtual + 1)*condicoes->getCustoCarro());
+    solucao->setNumeroRotas( (rotaAtual + 1));
+    solucao->setClientesTerceirizados(clientesTerceirizados);
+
+    return solucao;
 }

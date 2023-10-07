@@ -28,15 +28,15 @@ int ProblemaCondicoes::getCustoCarro() const {
     return custoCarro;
 }
 
-std::vector<int> ProblemaCondicoes::getDemandaClientes() const {
+const std::vector<int>& ProblemaCondicoes::getDemandaClientes() const {
     return demandaClientes;
 }
 
-std::vector<int> ProblemaCondicoes::getCustoTerceirizacao() const {
+const std::vector<int>& ProblemaCondicoes::getCustoTerceirizacao() const {
     return custoTerceirizacao;
 }
 
-std::vector<std::vector<int>> ProblemaCondicoes::getCustoCaminho() const {
+const std::vector<std::vector<int>>& ProblemaCondicoes::getCustoCaminho() const {
     return custoCaminho;
 }
 

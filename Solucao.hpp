@@ -25,11 +25,11 @@ class Solucao {
 
         int getCustoTerceirizacao() const;
 
-        std::vector<int> getClientesTerceirizados() const;
+        const std::vector<int>& getClientesTerceirizados() const;
 
         int getNumeroRotas() const;
 
-        std::vector<std::vector<int>> getRotas() const;
+        const std::vector<std::vector<int>>& getRotas() const;
 
         void setValorSolucao(int valor);
 
@@ -46,6 +46,8 @@ class Solucao {
         void setRotas(const std::vector<std::vector<int>>& rotas);
 
         void printaSolucao();
+
+        void addRota(std::vector<int> rota);
 
         
 };
