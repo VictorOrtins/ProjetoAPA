@@ -1,37 +1,15 @@
 #include "funcoes.hpp"
+#include <filesystem>
 
 
 //Faz o split de uma string em um vector de inteiros
-std::vector<int> split(const std::string& text, char sep)
-{
+std::vector<int> split(const std::string& text) {
     std::vector<int> tokens;
-    std::size_t start = 0, end = 0;
+    std::istringstream iss(text);
+    int number;
 
-    while ((end = text.find(sep, start)) != std::string::npos)
-    {
-        std::string temp = text.substr(start, end - start);
-
-        try {
-            int numero = std::stoi(temp);
-            tokens.push_back(numero);
-        } catch (const std::invalid_argument& e) {
-            throw e;
-        } catch (const std::out_of_range& e) {
-            throw e;
-        }
-
-        start = end + 1;
-    }
-
-    std::string temp = text.substr(start);
-
-    try {
-        int numero = std::stoi(temp);
-        tokens.push_back(numero);
-    } catch (const std::invalid_argument& e) {
-        throw e;
-    } catch (const std::out_of_range& e) {
-        throw e;
+    while (iss >> number) {
+        tokens.push_back(number);
     }
 
     return tokens;
@@ -70,13 +48,13 @@ ProblemaCondicoes* leArquivo(std::string nomeArquivo){
     std::getline(arquivo, tempString);
     std::getline(arquivo, tempString);
 
-    std::vector<int> tempVector = split(tempString, ' ');
+    std::vector<int> tempVector = split(tempString);
     condicoes->setDemandaClientes(tempVector);
 
     std::getline(arquivo, tempString);
     std::getline(arquivo, tempString);
 
-    tempVector = split(tempString, ' ');
+    tempVector = split(tempString);
     condicoes->setCustoTerceirizacao(tempVector);
 
     std::vector<std::vector<int>> tempMatriz;
@@ -84,7 +62,7 @@ ProblemaCondicoes* leArquivo(std::string nomeArquivo){
     std::getline(arquivo, tempString);
     for (int i = 0; i < condicoes->getTotalEntregas() + 1; i++){
         std::getline(arquivo, tempString);
-        tempVector = split(tempString, ' ');
+        tempVector = split(tempString);
         tempMatriz.push_back(tempVector);
     }
 
@@ -271,4 +249,38 @@ Solucao* algoritmoGuloso(ProblemaCondicoes *condicoes){
     solucao->setClientesTerceirizados(clientesTerceirizados); //Coloca os clientes terceirizados
 
     return solucao;
+}
+
+void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDestino){
+    std::vector<std::string> nomesArquivos;
+
+    for (const auto& entry : std::filesystem::directory_iterator(nomePastaInstancias)) {
+        if(entry.is_regular_file()){
+            nomesArquivos.push_back(entry.path().filename().string());
+        }
+    }
+
+    ProblemaCondicoes *condicoes;
+    Solucao* solucao;
+
+    for(std::string str : nomesArquivos){
+        condicoes = leArquivo(nomePastaInstancias + "/" + str);
+
+        if(condicoes == nullptr){
+            std::cout << "ERRO!\n";
+            return;
+        }
+
+        solucao = algoritmoGuloso(condicoes);
+
+        if(solucao == nullptr){
+            std::cout << "ERRO!\n";
+            return;
+        }
+
+        escreveArquivo(nomePastaDestino + "/" + str, solucao);
+
+        delete condicoes;
+        delete solucao;
+    }
 }
