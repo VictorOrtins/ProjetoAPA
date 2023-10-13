@@ -1,6 +1,8 @@
 #include "guloso.hpp"
 
-Solucao* algoritmoGuloso(ProblemaCondicoes *condicoes){
+RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
+
+    auto inicio = std::chrono::high_resolution_clock::now();
 
     Solucao* solucao = new Solucao(); //Cria a solução
 
@@ -120,7 +122,14 @@ Solucao* algoritmoGuloso(ProblemaCondicoes *condicoes){
     solucao->setNumeroRotas( (rotaAtual + 1)); //Quantidade de rotas utilizadas
     solucao->setClientesTerceirizados(clientesTerceirizados); //Coloca os clientes terceirizados
 
-    return solucao;
+    auto resultado = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - inicio);
+    double seconds = static_cast<double>(resultado.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den;
+
+    RetornoGuloso* retornoGuloso = new RetornoGuloso();
+    retornoGuloso->solucao = solucao;
+    retornoGuloso->seconds = seconds;
+
+    return retornoGuloso;
 }
 
 void terceiriza(std::vector<int> &verticesRestantes, int custoAtualTerceirizacao, std::vector<int> &custoTerceirizar, std::vector<int> &clientesTerceirizados){

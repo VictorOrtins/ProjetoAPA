@@ -113,9 +113,6 @@ bool escreveArquivo(std::string arquivoDestino, Solucao* solucao){
     arquivo << solucao->getNumeroRotas();
     for(Rota temp : solucao->getRotas()){
         arquivo << std::endl;
-        // for(int i: temp.getRota()){
-        //     arquivo << i << " ";
-        // }
         for(unsigned int i = 0; i < temp.getRota().size(); i++){
             if(!(i == 0 || i == temp.getRota().size() - 1)){
                 arquivo << temp.getRota().at(i) << " ";
@@ -138,6 +135,7 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
 
     ProblemaCondicoes *condicoes;
     Solucao* solucao;
+    RetornoGuloso* retornoGuloso;
 
     for(std::string str : nomesArquivos){
         condicoes = leArquivo(nomePastaInstancias + "/" + str);
@@ -147,11 +145,18 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
             return;
         }
 
-        solucao = algoritmoGuloso(condicoes);
+        retornoGuloso = algoritmoGuloso(condicoes);
+        solucao = retornoGuloso->solucao;
+
+        printf("Tempo de Execucao Guloso: %.6fs\n", retornoGuloso->seconds);
 
         if(solucao == nullptr){
             std::cout << "ERRO!\n";
             return;
+        }
+
+        while(swap(condicoes, solucao)){
+
         }
 
         escreveArquivo(nomePastaDestino + "/" + str, solucao);

@@ -7,7 +7,7 @@
 
 #include <limits>
 
-void swap(ProblemaCondicoes *condicoes, Solucao *solucao);
+bool swap(ProblemaCondicoes *condicoes, Solucao *solucao);
 void trocaVertices(int melhor_i, int melhor_j, int menorCusto, std::vector<int>& vectorRota);
 
 #endif

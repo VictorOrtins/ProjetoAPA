@@ -1,12 +1,14 @@
 #include "vnd.hpp"
 
-void swap(ProblemaCondicoes *condicoes, Solucao *solucao){
+bool swap(ProblemaCondicoes *condicoes, Solucao *solucao){
     const int INFINITO = std::numeric_limits<int>::max();
     
     std::vector<Rota>& rotas = solucao->getRotas();
     std::vector<std::vector<int>>& custoCaminhos = condicoes->getCustoCaminho();
 
     int novoCustoRoteamento = 0;
+
+    bool swapOcorreu = false;
 
     for(Rota &rota: rotas){
         std::vector<int>& vectorRota = rota.getRota();
@@ -53,6 +55,7 @@ void swap(ProblemaCondicoes *condicoes, Solucao *solucao){
             trocaVertices(melhor_i, melhor_j, menorCusto, vectorRota);
             rota.setCustoRota(menorCusto);
             novoCustoRoteamento += menorCusto;
+            swapOcorreu = true;
         }
         else{
             novoCustoRoteamento += custoRota;
@@ -60,6 +63,7 @@ void swap(ProblemaCondicoes *condicoes, Solucao *solucao){
     }
 
     solucao->setCustoRoteamento(novoCustoRoteamento);
+    return swapOcorreu;
 }
 
 void trocaVertices(int melhor_i, int melhor_j, int menor_custo, std::vector<int> &rota){

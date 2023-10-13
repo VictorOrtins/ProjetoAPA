@@ -4,8 +4,14 @@
 #include "Solucao.hpp"
 #include "ProblemaCondicoes.hpp"
 #include <limits>
+#include <chrono>
 
-Solucao* algoritmoGuloso(ProblemaCondicoes *condicoes);
+struct RetornoGuloso{
+    Solucao* solucao;
+    double seconds;
+};
+
+RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes);
 
 void terceiriza(std::vector<int> &verticesRestantes, int custoAtualTerceirizacao, std::vector<int> &custoTerceirizar, std::vector<int> &clientesTerceirizados);
 

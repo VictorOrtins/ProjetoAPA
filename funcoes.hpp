@@ -4,6 +4,7 @@
 #include "Solucao.hpp"
 #include "ProblemaCondicoes.hpp"
 #include "guloso.hpp"
+#include "vnd.hpp"
 
 #include <vector>
 #include <string>
