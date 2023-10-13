@@ -24,15 +24,15 @@ int Solucao::getCustoTerceirizacao() const {
     return custoTerceirizacao;
 }
 
-const std::vector<int>& Solucao::getClientesTerceirizados() const {
+std::vector<int>& Solucao::getClientesTerceirizados(){
     return clientesTerceirizados;
 }
 
-int Solucao::getNumeroRotas() const {
+int Solucao::getNumeroRotas() const{
     return numeroRotas;
 }
 
-const std::vector<std::vector<int>>& Solucao::getRotas() const {
+std::vector<Rota>& Solucao::getRotas(){
     return rotas;
 }
 
@@ -61,7 +61,7 @@ void Solucao::setNumeroRotas(int numero) {
     atualizaValorSolucao();
 }
 
-void Solucao::setRotas(const std::vector<std::vector<int>>& rotas) {
+void Solucao::setRotas(const std::vector<Rota>& rotas) {
     this->rotas = rotas;
     atualizaValorSolucao();
 }
@@ -70,7 +70,7 @@ void Solucao::atualizaValorSolucao(){
     this->valorSolucao = this->custoRoteamento + this->custoTerceirizacao + this->custoVeiculos;
 }
 
-void Solucao::addRota(std::vector<int> rota){
+void Solucao::addRota(Rota rota){
     this->rotas.push_back(rota);
 }
 
@@ -90,7 +90,8 @@ void Solucao::printaSolucao(){
 
     for (int i = 0; i < numeroRotas; i++){
         std::cout << "Rota " << i + 1 << ": ";
-        for(int j: rotas[i]){
+        Rota rota = rotas.at(i);
+        for(int j: rota.getRota()){
             std::cout << j << " ";
         }
         std::cout << "\n";

@@ -2,22 +2,27 @@
 ####################### Makefile Template ##############################
 ########################################################################
 
+# Obtém o diretório atual no Windows
+ifeq ($(OS),Windows_NT)
+    CURRENT_DIR := $(shell powershell -command "[System.IO.Path]::GetDirectoryName('$(realpath $(lastword $(MAKEFILE_LIST)))')")
+else
+    CURRENT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
+endif
+
 # Compiler settings - Can be customized.
 CC = g++
-CXXFLAGS = -std=c++17 -Wall
+CXXFLAGS = -O3 -std=c++17 -Wall
 LDFLAGS = 
 
 # Makefile settings - Can be customized.
 APPNAME = main
 EXT = .cpp
-SRCDIR = .
-OBJDIR = C:\Users\victo\Documents\P5\APA\Projeto\obj
-
+SRCDIR = $(CURRENT_DIR)
+OBJDIR = .
 
 ############## Do not change anything from here downwards! #############
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
-DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
 # UNIX-based OS variables & settings
 RM = rm
 DELOBJ = $(OBJ)

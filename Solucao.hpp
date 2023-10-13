@@ -2,6 +2,7 @@
 #define SOLUCAO_H
 
 #include <vector>
+#include "Rota.hpp"
 
 class Solucao {
     private:
@@ -11,7 +12,7 @@ class Solucao {
         int custoTerceirizacao; //Custo da terceirização dos vértices
         std::vector<int> clientesTerceirizados; //Clientes que tiveram suas entregas terceirizadas
         int numeroRotas; //Número de rotas utilizadas
-        std::vector<std::vector<int>> rotas; //Rotas utilizadas
+        std::vector<Rota> rotas; //Rotas utilizadas
 
         void atualizaValorSolucao(); //Atualiza o valor da solução sempre que setCustoRoteamento,
         //setCustoVeiculos e setCustoTerceirizacao são chamados
@@ -26,11 +27,11 @@ class Solucao {
 
         int getCustoTerceirizacao() const;
 
-        const std::vector<int>& getClientesTerceirizados() const;
+        std::vector<int>& getClientesTerceirizados();
 
         int getNumeroRotas() const;
 
-        const std::vector<std::vector<int>>& getRotas() const;
+        std::vector<Rota>& getRotas();
 
         void setValorSolucao(int valor);
 
@@ -44,12 +45,12 @@ class Solucao {
 
         void setNumeroRotas(int numero);
 
-        void setRotas(const std::vector<std::vector<int>>& rotas);
+        void setRotas(const std::vector<Rota>& rotas);
 
         void printaSolucao();
 
         //Adiciona uma rota nas rotas
-        void addRota(std::vector<int> rota);
+        void addRota(Rota rota);
 
         
 };
