@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 
+#include "ProblemaCondicoes.hpp"
+
 class Rota{
     private:
         std::vector<int> rota;
@@ -18,6 +20,7 @@ class Rota{
         void addVertice(int vertice);
         void clearRota();
         void printRota();
+        void atualizarCustoRota(ProblemaCondicoes *condicoes);
 
 };
 

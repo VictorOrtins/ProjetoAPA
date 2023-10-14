@@ -123,13 +123,13 @@ bool escreveArquivo(std::string arquivoDestino, Solucao* solucao){
     return true;
 }
 
-
+//Testa todas as instâncias em uma pasta
 void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDestino){
-    std::vector<std::string> nomesArquivos;
+    std::vector<std::string> nomesArquivos; //Vector que terá o nome dos arquivos
 
     for (const auto& entry : std::filesystem::directory_iterator(nomePastaInstancias)) {
-        if(entry.is_regular_file()){
-            nomesArquivos.push_back(entry.path().filename().string());
+        if(entry.is_regular_file()){ //Se de fato for um arquivo
+            nomesArquivos.push_back(entry.path().filename().string()); //Colocar na lista
         }
     }
 
@@ -137,29 +137,33 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
     Solucao* solucao;
     RetornoGuloso* retornoGuloso;
 
-    for(std::string str : nomesArquivos){
-        condicoes = leArquivo(nomePastaInstancias + "/" + str);
+    for(std::string str : nomesArquivos){ //Em cada arquivo
+        condicoes = leArquivo(nomePastaInstancias + "/" + str); //Lê o arquivo
 
-        if(condicoes == nullptr){
+        if(condicoes == nullptr){ //Se houve algum erro na hora de criar as condições
             std::cout << "ERRO!\n";
             return;
         }
 
-        retornoGuloso = algoritmoGuloso(condicoes);
-        solucao = retornoGuloso->solucao;
+        retornoGuloso = algoritmoGuloso(condicoes); //Faz o algoritmo guloso
+        solucao = retornoGuloso->solucao; 
 
         printf("Tempo de Execucao Guloso: %.6fs\n", retornoGuloso->seconds);
 
-        if(solucao == nullptr){
+        if(solucao == nullptr){ //Se algo der errado na criação da solução
             std::cout << "ERRO!\n";
             return;
         }
 
-        while(swap(condicoes, solucao)){
+        while(swap(condicoes, solucao)){ 
 
         }
 
-        escreveArquivo(nomePastaDestino + "/" + str, solucao);
+        while(swapInterRotas(condicoes, solucao)){
+
+        }
+
+        escreveArquivo(nomePastaDestino + "/" + str, solucao); //Escreve no arquivo
 
         delete condicoes;
         delete solucao;

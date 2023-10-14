@@ -36,3 +36,13 @@ void Rota::printRota(){
     std::cout << "\n";
 }
 
+void Rota::atualizarCustoRota(ProblemaCondicoes *condicoes){
+    int novoCusto = 0;
+    std::vector<std::vector<int>> &custoCaminhos = condicoes->getCustoCaminho();
+
+    for(unsigned int i = 0; i < this->rota.size() - 1; i++){
+        novoCusto += custoCaminhos.at(rota.at(i)).at(rota.at(i + 1));
+    }
+    this->custoRota = novoCusto;
+}
+

@@ -1,5 +1,6 @@
 #include "guloso.hpp"
 
+//Procura uma solução gulosa para o problema. A ideia é começar uma rota, ir até que a capacidade dela estoure e só depois ir para a próxima
 RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
 
     auto inicio = std::chrono::high_resolution_clock::now();
@@ -132,13 +133,15 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
     return retornoGuloso;
 }
 
+//Terceiriza as rotas que sobraram
 void terceiriza(std::vector<int> &verticesRestantes, int custoAtualTerceirizacao, std::vector<int> &custoTerceirizar, std::vector<int> &clientesTerceirizados){
     for(int vertice : verticesRestantes){
-        custoAtualTerceirizacao += custoTerceirizar.at(vertice - 1);
-        clientesTerceirizados.push_back(vertice);
+        custoAtualTerceirizacao += custoTerceirizar.at(vertice - 1); //Calcula o custo de terceirizar o vértice atual
+        clientesTerceirizados.push_back(vertice); //Coloca o vértice atual nos restantes
     }
 }
 
+//Troca a rota atual, adiciona o vértice 0 no final da rota anterior e coloca 0 no início da próxima rota e atualiza o custo da rota que passou
 void trocaRota(int &custoAtualSolucao, std::vector<int> &verticeCustos, int &verticeAtual, Solucao *solucao, Rota &rota, int &rotaAtual, std::vector<std::vector<int>> &custoCaminhos){
     custoAtualSolucao += verticeCustos.at(0); //Adiciona o custo de ir para 0
     rota.setCustoRota(rota.getCustoRota() + custoCaminhos.at(verticeAtual).at(0));

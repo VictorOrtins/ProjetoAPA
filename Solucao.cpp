@@ -70,6 +70,7 @@ void Solucao::atualizaValorSolucao(){
     this->valorSolucao = this->custoRoteamento + this->custoTerceirizacao + this->custoVeiculos;
 }
 
+//Adiciona uma rota nas rotas
 void Solucao::addRota(Rota rota){
     this->rotas.push_back(rota);
 }

@@ -19,6 +19,7 @@ class ProblemaCondicoes {
     public:
 
         ProblemaCondicoes();
+
         // Getters
         int getTotalEntregas() const;
 
@@ -35,6 +36,7 @@ class ProblemaCondicoes {
         std::vector<int>& getCustoTerceirizacao();
 
         std::vector<std::vector<int>>& getCustoCaminho();
+        
         // Setters
         void setTotalEntregas(int n);
 
