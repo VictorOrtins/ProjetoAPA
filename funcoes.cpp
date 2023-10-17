@@ -159,7 +159,7 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
 
         }
 
-        while(swapInterRotas(condicoes, solucao)){
+        while(swapInterRotas(condicoes, solucao)){ 
 
         }
 
