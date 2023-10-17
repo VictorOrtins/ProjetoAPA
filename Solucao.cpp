@@ -6,6 +6,7 @@ Solucao::Solucao(){
     this->custoRoteamento = 0;
     this->custoVeiculos = 0;
     this->custoTerceirizacao = 0;
+    this->entregasNaoTerceirizadas = 0;
 }
  
  int Solucao::getValorSolucao() const {
@@ -34,6 +35,10 @@ int Solucao::getNumeroRotas() const{
 
 std::vector<Rota>& Solucao::getRotas(){
     return rotas;
+}
+
+int Solucao::getEntregasNaoTerceirizadas(){
+    return entregasNaoTerceirizadas;
 }
 
 void Solucao::setCustoRoteamento(int custo) {
@@ -66,6 +71,10 @@ void Solucao::setRotas(const std::vector<Rota>& rotas) {
     atualizaValorSolucao();
 }
 
+void Solucao::setEntregasNaoTerceirizadas(int entregasNaoTerceirizadas){
+    this->entregasNaoTerceirizadas = entregasNaoTerceirizadas;
+}
+
 void Solucao::atualizaValorSolucao(){
     this->valorSolucao = this->custoRoteamento + this->custoTerceirizacao + this->custoVeiculos;
 }
@@ -73,6 +82,15 @@ void Solucao::atualizaValorSolucao(){
 //Adiciona uma rota nas rotas
 void Solucao::addRota(Rota rota){
     this->rotas.push_back(rota);
+}
+
+void Solucao::addClienteTerceirizado(int clienteTerceirizado){
+    clientesTerceirizados.push_back(clienteTerceirizado);
+}
+
+void Solucao::removeRota(int indice){
+    rotas.erase(rotas.begin() + indice);
+    numeroRotas--;
 }
 
 void Solucao::printaSolucao(){

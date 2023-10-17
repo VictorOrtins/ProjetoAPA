@@ -14,6 +14,8 @@ class Solucao {
         int numeroRotas; //Número de rotas utilizadas
         std::vector<Rota> rotas; //Rotas utilizadas
 
+        int entregasNaoTerceirizadas;
+
         void atualizaValorSolucao(); //Atualiza o valor da solução sempre que setCustoRoteamento,
         //setCustoVeiculos e setCustoTerceirizacao são chamados
 
@@ -33,6 +35,8 @@ class Solucao {
 
         std::vector<Rota>& getRotas();
 
+        int getEntregasNaoTerceirizadas();
+
         void setValorSolucao(int valor);
 
         void setCustoRoteamento(int custo);
@@ -47,10 +51,18 @@ class Solucao {
 
         void setRotas(const std::vector<Rota>& rotas);
 
+        void setEntregasNaoTerceirizadas(int entregasNaoTerceirizadas);
+
         void printaSolucao();
 
         //Adiciona uma rota nas rotas
         void addRota(Rota rota);
+
+        //Adiciona um cliente terceirizado
+        void addClienteTerceirizado(int clienteTerceirizado);
+
+        //Remove uma rota das rotas
+        void removeRota(int indice);
 
         
 };

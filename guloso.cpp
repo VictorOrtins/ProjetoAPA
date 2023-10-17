@@ -85,6 +85,7 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
         }
 
         //Já que foi achado o vértice a ser adicionado, coloca na solução
+
         custoAtualSolucao += verticeCustos.at(verticeMenorCusto); //Aumenta o custo da solução pela adição do vértice
         capacidadeAtualRota.at(rotaAtual) += demandas.at(verticeMenorCusto - 1); //Aumenta a capacidade atual da rota
         //Note que, como as demandas tem tamanho da qtd de entregas, ou seja, n, precisamos utilizar o -1
@@ -92,6 +93,7 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
 
         rota.addVertice(verticeMenorCusto); //Adiciona o vértice de menor custo na rota
         rota.setCustoRota(rota.getCustoRota() + verticeCustos.at(verticeMenorCusto));
+        solucao->setEntregasNaoTerceirizadas(solucao->getEntregasNaoTerceirizadas() + 1);
         
         verticeAtual = verticeMenorCusto; //Vai para o vértice adicionado
 
