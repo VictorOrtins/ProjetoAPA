@@ -155,13 +155,9 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
             return;
         }
 
-        while(swap(condicoes, solucao)){ 
+        double tempo = VND(condicoes, solucao);
 
-        }
-
-        while(swapInterRotas(condicoes, solucao)){ 
-
-        }
+        printf("Tempo de execucao VND: %.6fs\n", tempo);
 
         escreveArquivo(nomePastaDestino + "/" + str, solucao); //Escreve no arquivo
 

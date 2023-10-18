@@ -3,8 +3,6 @@
 //Procura uma solução gulosa para o problema. A ideia é começar uma rota, ir até que a capacidade dela estoure e só depois ir para a próxima
 RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
 
-    auto inicio = std::chrono::high_resolution_clock::now();
-
     Solucao* solucao = new Solucao(); //Cria a solução
 
     const int INFINITO = std::numeric_limits<int>::max();
@@ -15,6 +13,8 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
     int capacidadeMaximaVeiculo = condicoes->getCapacidadeVeiculo(); //Pega a capacidade máxima por veículo
     int numRotas = condicoes->getTotalVeiculos(); //Pega o máximo de rotas que podem ser feitas
     std::vector<int>& custoTerceirizar = condicoes->getCustoTerceirizacao(); //Pega os custos de terceirização
+
+    auto inicio = std::chrono::high_resolution_clock::now();
 
     std::vector<int> verticesRestantes; //Inicia o vector auxiliar de vértices restantes. Será iniciado
     //com todos os vértices

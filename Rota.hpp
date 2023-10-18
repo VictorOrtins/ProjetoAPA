@@ -17,9 +17,17 @@ class Rota{
         void setCustoRota(int custoRota);
         std::vector<int>& getRota();
         int getCustoRota();
+
+        //Adiciona o vértice na rota
         void addVertice(int vertice);
+
+        //Apaga os vértices da rota
         void clearRota();
+
+        //Printa a rota
         void printRota();
+
+        //Atualiza o custo da rota
         void atualizarCustoRota(ProblemaCondicoes *condicoes);
 
 };

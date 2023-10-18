@@ -7,6 +7,7 @@ Solucao::Solucao(){
     this->custoVeiculos = 0;
     this->custoTerceirizacao = 0;
     this->entregasNaoTerceirizadas = 0;
+    this->numeroRotas = 0;
 }
  
  int Solucao::getValorSolucao() const {

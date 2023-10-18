@@ -6,6 +6,7 @@
 #include "Rota.hpp"
 
 #include <limits>
+#include <chrono>
 
 //Movimento de vizinhança de swap numa mesma rota. Procura fazer o melhor swap para cada uma das rotas numa mesma chamada
 bool swap(ProblemaCondicoes *condicoes, Solucao *solucao);
@@ -21,5 +22,8 @@ void trocaInterRota(int indiceRota1, int indiceRota2, std::vector<int> &vectorRo
 
 //Movimento de vizinhança que tenta terceirizar um dos vértices da solução
 bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao);
+
+//Função que aplica as estruturas de vizinhança
+double VND(ProblemaCondicoes *condicoes, Solucao *solucao);
 
 #endif

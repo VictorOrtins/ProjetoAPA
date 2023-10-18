@@ -14,7 +14,7 @@ class Solucao {
         int numeroRotas; //Número de rotas utilizadas
         std::vector<Rota> rotas; //Rotas utilizadas
 
-        int entregasNaoTerceirizadas;
+        int entregasNaoTerceirizadas; //Número de entregas que não foram terceirizadas
 
         void atualizaValorSolucao(); //Atualiza o valor da solução sempre que setCustoRoteamento,
         //setCustoVeiculos e setCustoTerceirizacao são chamados

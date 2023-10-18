@@ -25,8 +25,7 @@ int main(int argc, char* argv[]){
     // delete condicoes;
     // delete solucao;
 
-    // testeInstancias("instancias", "finalSoSwapInter");
-
+    testeInstancias("instancias", "finalComVND");
 }
 
 
