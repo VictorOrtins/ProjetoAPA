@@ -138,6 +138,7 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
     RetornoGuloso* retornoGuloso;
 
     for(std::string str : nomesArquivos){ //Em cada arquivo
+        std::cout << "Arquivo: " << str << "\n";
         condicoes = leArquivo(nomePastaInstancias + "/" + str); //Lê o arquivo
 
         if(condicoes == nullptr){ //Se houve algum erro na hora de criar as condições
@@ -148,7 +149,7 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
         retornoGuloso = algoritmoGuloso(condicoes); //Faz o algoritmo guloso
         solucao = retornoGuloso->solucao; 
 
-        printf("Tempo de Execucao Guloso: %.6fs\n", retornoGuloso->seconds);
+        printf("\tTempo de Execucao Guloso: %.6fs\n", retornoGuloso->seconds);
 
         if(solucao == nullptr){ //Se algo der errado na criação da solução
             std::cout << "ERRO!\n";
@@ -157,7 +158,7 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
 
         double tempo = VND(condicoes, solucao);
 
-        printf("Tempo de execucao VND: %.6fs\n", tempo);
+        printf("\tTempo de execucao VND: %.6fs\n", tempo);
 
         escreveArquivo(nomePastaDestino + "/" + str, solucao); //Escreve no arquivo
 

@@ -177,6 +177,7 @@ bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao){
     std::vector<Rota>& rotas = solucao->getRotas(); //Pega as rotas da solução
     std::vector<std::vector<int>>& custoCaminhos = condicoes->getCustoCaminho(); //Pega o custo de cada caminho
     std::vector<int> &custoTerceirizacao = condicoes->getCustoTerceirizacao(); //Pega os custos de terceirização de um vértice
+    std::vector<int> &demandas = condicoes->getDemandaClientes();
 
     int melhor_i = -1; //Melhor vértice para terceirizar
     int rotaMelhorTerceirizacao = -1; //Rota em que ocorre a melhor terceirização
@@ -191,6 +192,7 @@ bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao){
 
         for(unsigned int i = 1; i < rotaVector.size() - 1; i++){ //Itera em todos os vértices possíveis (depois do 0 inicial e antes do 0 final)]
             int verticeI = rotaVector.at(i); //Vértice i
+
             int verticeDepoisI = rotaVector.at(i + 1); //Vértice i+1
             int verticeAntesI = rotaVector.at(i - 1); //Vértice i-1
 
@@ -219,8 +221,12 @@ bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao){
     if(menorCustoSolucaoDelta < 0){ //Se a melhor terceirização diminuir o custo da solução
         solucao->addClienteTerceirizado(rotas.at(rotaMelhorTerceirizacao).getRota().at(melhor_i)); //Adiciona o cliente terceirizado ao vector de clientes terceirizados
 
+        //Atualiza a capacidade atual da rota
+        int verticeMelhorI = rotas.at(rotaMelhorTerceirizacao).getRota().at(melhor_i);
+        rotas.at(rotaMelhorTerceirizacao).setCapacidadeAtualRota(rotas.at(rotaMelhorTerceirizacao).getCapacidadeAtualRota() - demandas.at(verticeMelhorI - 1));
+        
         //Apaga da rota o vértice terceirizado
-        rotas.at(rotaMelhorTerceirizacao).getRota().erase(rotas.at(rotaMelhorTerceirizacao).getRota().begin() + melhor_i); 
+        rotas.at(rotaMelhorTerceirizacao).getRota().erase(rotas.at(rotaMelhorTerceirizacao).getRota().begin() + melhor_i);
 
         //Atualiza o custo de roteamento
         solucao->setCustoRoteamento(solucao->getCustoRoteamento() + menorDeltaRoteamento);
@@ -233,6 +239,7 @@ bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao){
 
         if (rotas.at(rotaMelhorTerceirizacao).getRota().size() == 2){ //Se a rota só tem 0-0, essa rota não existe mais e precisa ser excluída
             solucao->removeRota(rotaMelhorTerceirizacao); //Remove da rota a solução
+            solucao->setCustoVeiculos(solucao->getCustoVeiculos() - condicoes->getCustoCarro());
         }
 
         return true; //Terceirização ocorreu
@@ -259,6 +266,7 @@ double VND(ProblemaCondicoes *condicoes, Solucao *solucao){
     while(estruturaAtual < numEstruturasVizinhanca){
         switch(estruturaAtual){
             case 0:{
+                printf("\t\tSwap\n");
                 movimentoAconteceu = swap(condicoes, solucao);
                 if(!movimentoAconteceu){
                     estruturaAtual++;
@@ -270,6 +278,7 @@ double VND(ProblemaCondicoes *condicoes, Solucao *solucao){
             }
 
             case 1:{
+                printf("\t\tSwap Entre Rotas\n");
                 movimentoAconteceu = swapInterRotas(condicoes, solucao);
                 if(!movimentoAconteceu){
                     estruturaAtual++;
@@ -281,6 +290,7 @@ double VND(ProblemaCondicoes *condicoes, Solucao *solucao){
             }
 
             case 2:{
+                printf("\t\tTerceirizacao\n");
                 movimentoAconteceu = melhorTerceirizacao(condicoes, solucao);
                 if(!movimentoAconteceu){
                     estruturaAtual++;
