@@ -2,6 +2,7 @@
 
 Rota::Rota(){
     this->custoRota = 0;
+    this->capacidadeAtualRota = 0;
 }
 
 void Rota::setRota(std::vector<int> rota){
@@ -12,12 +13,20 @@ void Rota::setCustoRota(int custoRota){
     this->custoRota = custoRota;
 }
 
+void Rota::setCapacidadeAtualRota(int capacidadeRota){
+    this->capacidadeAtualRota = capacidadeRota;
+}
+
 std::vector<int>& Rota::getRota(){
     return this->rota;
 }
 
 int Rota::getCustoRota(){
     return this->custoRota;
+}
+
+int Rota::getCapacidadeAtualRota(){
+    return this->capacidadeAtualRota;
 }
 
 void Rota::addVertice(int vertice){
@@ -27,6 +36,7 @@ void Rota::addVertice(int vertice){
 void Rota::clearRota(){
     rota.clear();
     this->custoRota = 0;
+    this->capacidadeAtualRota = 0;
 }
 
 void Rota::printRota(){

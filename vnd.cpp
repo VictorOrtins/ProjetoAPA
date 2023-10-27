@@ -78,6 +78,9 @@ bool swapInterRotas(ProblemaCondicoes *condicoes, Solucao *solucao){
     
     std::vector<Rota>& rotas = solucao->getRotas(); //Rotas registradas na solução
     std::vector<std::vector<int>>& custoCaminhos = condicoes->getCustoCaminho(); //Matriz de custos dos caminhos
+    std::vector<int> &demandas = condicoes->getDemandaClientes();
+
+    int capacidadeMaximaVeiculo = condicoes->getCapacidadeVeiculo();
 
     int rotaMelhorSwap1 = -1, rotaMelhorSwap2 = -1; //Indica em quais rotas ocorreu o melhor swap
     int melhorIndiceRota1 = -1, melhorIndiceRota2 = -1; //Índices dos melhores vértices da rota 1 e da rota 2
@@ -97,10 +100,15 @@ bool swapInterRotas(ProblemaCondicoes *condicoes, Solucao *solucao){
                 int verticeAntesK = rota1Vector.at(k - 1); //Vértice da rota 1 na posição k-1
                 int verticeDepoisK = rota1Vector.at(k + 1); //Vértice da rota 1 na posição k+1
 
+                int capacidadeAtualRota1 = rota1.getCapacidadeAtualRota();
+
+
                 for(unsigned int l = 1; l < rota2Vector.size() - 1; l++){ //Itera sobre os vértices possíveis da rota 2
                     int verticeL = rota2Vector.at(l); //Vértice da rota 2 na posição l
                     int verticeAntesL = rota2Vector.at(l - 1); //Vértice da rota 2 na posição l-1
                     int verticeDepoisL = rota2Vector.at(l + 1); //Vértice da rota 2 na posição l+1
+
+                    int capacidadeAtualRota2 = rota2.getCapacidadeAtualRota();
 
                     int custoSwapDeltaRota1, custoSwapDeltaRota2; //Custo das rotas 1 e 2 após o swap
 
@@ -115,17 +123,21 @@ bool swapInterRotas(ProblemaCondicoes *condicoes, Solucao *solucao){
 
 
                     if(custoSwapDeltaRota1 + custoSwapDeltaRota2 < menorCustoSwap){ //Se o custo total das duas rotas for menor que o menor custo encontrado após o swap das duas rotas
-                        //Atualizar em quais rotas ocorre o melhor swap
-                        rotaMelhorSwap1 = i;
-                        rotaMelhorSwap2 = j;
+                        if(capacidadeAtualRota1 - demandas.at(verticeK - 1) + demandas.at(verticeL - 1) <= capacidadeMaximaVeiculo 
+                        && capacidadeAtualRota2 - demandas.at(verticeL - 1) + demandas.at(verticeK - 1)){ //Se os dois veículos conseguem suportar a troca     
+                            //Atualizar em quais rotas ocorre o melhor swap
+                            rotaMelhorSwap1 = i;
+                            rotaMelhorSwap2 = j;
 
-                        //Atualizar os índices e custos do melhor swap
-                        melhorIndiceRota1 = k;
-                        melhorIndiceRota2 = l;
-                        menorCustoSwap = custoSwapDeltaRota1 + custoSwapDeltaRota2;
-                        //Delta do custo da rota no melhor swap
-                        deltaRota1MelhorSwap = custoSwapDeltaRota1;
-                        deltaRota2MelhorSwap = custoSwapDeltaRota2;
+                            //Atualizar os índices e custos do melhor swap
+                            melhorIndiceRota1 = k;
+                            melhorIndiceRota2 = l;
+                            menorCustoSwap = custoSwapDeltaRota1 + custoSwapDeltaRota2;
+
+                            //Delta do custo da rota no melhor swap
+                            deltaRota1MelhorSwap = custoSwapDeltaRota1;
+                            deltaRota2MelhorSwap = custoSwapDeltaRota2;
+                        }
                     }
                 }
             }
@@ -182,7 +194,6 @@ bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao){
             int verticeDepoisI = rotaVector.at(i + 1); //Vértice i+1
             int verticeAntesI = rotaVector.at(i - 1); //Vértice i-1
 
-            // std::cout << "teste" << rotaIndex << "\n";
 
             int custoTerceirizarDelta, deltaRoteamento;
             //Custo em delta da terceirização e custo em delta do roteamento após o movimento de vizinhança
@@ -230,21 +241,30 @@ bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao){
     return false; //Terceirização não ocorreu
 }
 
+// bool desterceirizaVertice(ProblemaCondicoes *condicoess, Solucao *solucao){
+//     const int INFINITO = std::numeric_limits<int>::max(); //Infinito
+
+
+// }
+
 double VND(ProblemaCondicoes *condicoes, Solucao *solucao){
 
-    const int numEstruturasVizinhanca = 2;
+    const int numEstruturasVizinhanca = 3;
 
     int estruturaAtual = 0;
     bool movimentoAconteceu = false;
 
     auto inicio = std::chrono::high_resolution_clock::now();
 
-    while(estruturaAtual <= numEstruturasVizinhanca){
+    while(estruturaAtual < numEstruturasVizinhanca){
         switch(estruturaAtual){
             case 0:{
                 movimentoAconteceu = swap(condicoes, solucao);
                 if(!movimentoAconteceu){
                     estruturaAtual++;
+                }
+                else{
+                    estruturaAtual = 0;
                 }
                 break;
             }

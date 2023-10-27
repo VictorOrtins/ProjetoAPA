@@ -1,4 +1,5 @@
 #include "guloso.hpp"
+#include <thread>
 
 //Procura uma solução gulosa para o problema. A ideia é começar uma rota, ir até que a capacidade dela estoure e só depois ir para a próxima
 RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
@@ -26,12 +27,6 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
     int verticeAtual = 0; //Vértice inicial sempre será o depósito
     int rotaAtual = 0; //As rotas serão indexadas começando de 0 para facilitar o entendimento
 
-    std::vector<int> capacidadeAtualRota; //Capacidade atual que a rota possui
-
-    for(int i = 0; i < numRotas; i++){
-        capacidadeAtualRota.push_back(0); //Todas as rotas não tem nada, logo começam com 0
-    }
-
     int custoAtualSolucao = 0; //Custo inicial da solução
     int custoAtualTerceirizacao = 0; //Custo da terceirização
 
@@ -44,7 +39,7 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
 
         //que armazenas os custos para sair do vértice atual
         //Se a rota atual conseguiu adicionar o vértice atual, porém encheu após isso
-        if(capacidadeAtualRota.at(rotaAtual) == capacidadeMaximaVeiculo){
+        if(rota.getCapacidadeAtualRota() == capacidadeMaximaVeiculo){
             if(rotaAtual + 1 == numRotas){ //Se as rotas acabaram
                 //Terceirizar o resto dos vértices
                 terceiriza(verticesRestantes, custoAtualTerceirizacao, custoTerceirizar, clientesTerceirizados);
@@ -65,7 +60,7 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
         for(int vertice: verticesRestantes){ //Dentre os vértices restantes
             //Procuramos o que pode ser adicionado pensando na capacidade e o que tem o menor custo
             //Se ele couber e tiver menos custo que o vértice de menor custo atual
-            if(verticeCustos.at(vertice) < menorCusto && capacidadeAtualRota.at(rotaAtual) + demandas.at(vertice - 1) <= capacidadeMaximaVeiculo){
+            if(verticeCustos.at(vertice) < menorCusto && rota.getCapacidadeAtualRota() + demandas.at(vertice - 1) <= capacidadeMaximaVeiculo){
                 //Atualiza o vértice de menor custo e o menor custo
                 verticeMenorCusto = vertice;
                 menorCusto = verticeCustos.at(vertice);
@@ -87,7 +82,7 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
         //Já que foi achado o vértice a ser adicionado, coloca na solução
 
         custoAtualSolucao += verticeCustos.at(verticeMenorCusto); //Aumenta o custo da solução pela adição do vértice
-        capacidadeAtualRota.at(rotaAtual) += demandas.at(verticeMenorCusto - 1); //Aumenta a capacidade atual da rota
+        rota.setCapacidadeAtualRota(rota.getCapacidadeAtualRota() + demandas.at(verticeMenorCusto - 1));//Aumenta a capacidade atual da rota
         //Note que, como as demandas tem tamanho da qtd de entregas, ou seja, n, precisamos utilizar o -1
         //pra pegar o índice correto
 
@@ -111,7 +106,7 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
 
     //Fecha a última rota, ou seja, após adicionar o último vértice, volta a última rota para o depósito
     custoAtualSolucao += custoCaminhos.at(verticeAtual).at(0);
-    capacidadeAtualRota.at(rotaAtual) += demandas.at(verticeAtual - 1);
+    rota.setCapacidadeAtualRota(rota.getCapacidadeAtualRota() + demandas.at(verticeAtual - 1));
 
     rota.setCustoRota(rota.getCustoRota() + custoCaminhos.at(verticeAtual).at(0));
     rota.addVertice(0);

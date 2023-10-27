@@ -10,14 +10,17 @@ class Rota{
     private:
         std::vector<int> rota;
         int custoRota;
+        int capacidadeAtualRota;
 
     public:
         Rota();
         void setRota(std::vector<int> rota);
         void setCustoRota(int custoRota);
+        void setCapacidadeAtualRota(int capacidadeRota);
+        
         std::vector<int>& getRota();
         int getCustoRota();
-
+        int getCapacidadeAtualRota();
         //Adiciona o vértice na rota
         void addVertice(int vertice);
 

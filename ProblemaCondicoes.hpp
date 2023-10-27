@@ -6,8 +6,8 @@
 
 class ProblemaCondicoes {
     private:
-        int totalEntregas; // Total de Entregas. Logo, é também o total de vértices que receberão entregas. O total de vértices
-        //é n+1, já que é preciso considerar também o depósito como vértice
+        int totalEntregas; // Total de Entregas. Logo, é também o total de vértices que receberão entregas.
+        // O total de vértices é n+1, já que é preciso considerar também o depósito como vértice
         int totalVeiculos; // Total de Veículos
         int capacidadeVeiculo; // Capacidade de cada Veículo
         int minimoEntregas; // Mínimo de Entregas sem terceirização
