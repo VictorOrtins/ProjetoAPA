@@ -106,7 +106,6 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
 
     //Fecha a última rota, ou seja, após adicionar o último vértice, volta a última rota para o depósito
     custoAtualSolucao += custoCaminhos.at(verticeAtual).at(0);
-    rota.setCapacidadeAtualRota(rota.getCapacidadeAtualRota() + demandas.at(verticeAtual - 1));
 
     rota.setCustoRota(rota.getCustoRota() + custoCaminhos.at(verticeAtual).at(0));
     rota.addVertice(0);
@@ -117,7 +116,7 @@ RetornoGuloso* algoritmoGuloso(ProblemaCondicoes *condicoes){
     solucao->setCustoRoteamento(custoAtualSolucao); //Custo das rotas
     solucao->setCustoTerceirizacao(custoAtualTerceirizacao); //Custo de terceirizar
     solucao->setCustoVeiculos( (rotaAtual + 1)*condicoes->getCustoCarro()); //Custo dos veículos
-    solucao->setNumeroRotas( (rotaAtual + 1)); //Quantidade de rotas utilizadas
+    // solucao->setNumeroRotas( (rotaAtual + 1)); //Quantidade de rotas utilizadas
     solucao->setClientesTerceirizados(clientesTerceirizados); //Coloca os clientes terceirizados
 
     auto resultado = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - inicio);

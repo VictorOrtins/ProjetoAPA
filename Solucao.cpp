@@ -9,6 +9,18 @@ Solucao::Solucao(){
     this->entregasNaoTerceirizadas = 0;
     this->numeroRotas = 0;
 }
+
+Solucao::Solucao(Solucao* nova){
+    this->valorSolucao = nova->valorSolucao;
+    this->custoRoteamento = nova->custoRoteamento;
+    this->custoVeiculos = nova->custoVeiculos;
+    this->custoTerceirizacao = nova->custoTerceirizacao;
+    this->entregasNaoTerceirizadas = nova->entregasNaoTerceirizadas;
+    this->numeroRotas = nova->numeroRotas;
+
+    this->clientesTerceirizados = nova->clientesTerceirizados;
+    this->rotas = nova->rotas;
+}
  
  int Solucao::getValorSolucao() const {
     return valorSolucao;
@@ -83,6 +95,7 @@ void Solucao::atualizaValorSolucao(){
 //Adiciona uma rota nas rotas
 void Solucao::addRota(Rota rota){
     this->rotas.push_back(rota);
+    this->numeroRotas++;
 }
 
 void Solucao::addClienteTerceirizado(int clienteTerceirizado){
@@ -92,6 +105,10 @@ void Solucao::addClienteTerceirizado(int clienteTerceirizado){
 void Solucao::removeRota(int indice){
     rotas.erase(rotas.begin() + indice);
     numeroRotas--;
+}
+
+void Solucao::removeClienteTerceirizado(int indice){
+    this->clientesTerceirizados.erase(clientesTerceirizados.begin() + indice);
 }
 
 void Solucao::printaSolucao(){

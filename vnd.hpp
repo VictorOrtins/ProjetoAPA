@@ -23,7 +23,7 @@ void trocaInterRota(int indiceRota1, int indiceRota2, std::vector<int> &vectorRo
 //Movimento de vizinhança que tenta terceirizar um dos vértices da solução
 bool melhorTerceirizacao(ProblemaCondicoes *condicoes, Solucao *solucao);
 
-bool desterceirizaVertice(ProblemaCondicoes *condicoess, Solucao *solucao);
+bool desterceirizaVertice(ProblemaCondicoes *condicoes, Solucao *solucao);
 
 //Função que aplica as estruturas de vizinhança
 double VND(ProblemaCondicoes *condicoes, Solucao *solucao);

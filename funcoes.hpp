@@ -26,7 +26,9 @@ Solucao* criaSolucao();
 bool escreveArquivo(std::string arquivoDestino, Solucao* solucao);
 
 //Testa todas as instâncias em uma pasta
-void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDestino);
+void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDestino, std::string nomeCsvTabela);
+
+bool testaSolucao(Solucao* solucao,ProblemaCondicoes *condicoes);
 
 
 #endif

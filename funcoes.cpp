@@ -1,4 +1,5 @@
 #include "funcoes.hpp"
+#include "ils.hpp"
 
 //Faz o split de uma string em um vector de inteiros
 std::vector<int> split(const std::string& text) {
@@ -123,8 +124,63 @@ bool escreveArquivo(std::string arquivoDestino, Solucao* solucao){
     return true;
 }
 
+bool testaSolucao(Solucao* solucao, ProblemaCondicoes* condicoes){
+    bool ret = true;
+    int custoRoteamento = 0;
+    int custoVeiculos = 0;
+
+    for(int i = 0; i < solucao->getNumeroRotas(); i++){
+        custoVeiculos += condicoes->getCustoCarro();
+
+        Rota &rota = solucao->getRotas().at(i);
+
+        std::vector<int> &rotaVector = rota.getRota();
+        int capacidadeRota = 0;
+        for(unsigned int j = 0; j < rotaVector.size() - 1; j++){
+            custoRoteamento += condicoes->getCustoCaminho().at(rotaVector.at(j)).at(rotaVector.at(j + 1));
+        }
+
+        for(unsigned int j = 1; j < rotaVector.size() - 1; j++){
+            capacidadeRota += condicoes->getDemandaClientes().at( rotaVector.at(j) - 1 );
+        }
+
+        if(capacidadeRota > condicoes->getCapacidadeVeiculo()){
+            printf("Capacidade\n");
+            ret = false;
+        }
+
+    }
+
+    int custoTerceirizar = 0;
+    for(int vertice : solucao->getClientesTerceirizados()){
+        custoTerceirizar += condicoes->getCustoTerceirizacao().at(vertice - 1);
+    }
+
+    if(custoTerceirizar != solucao->getCustoTerceirizacao()){
+        printf("terceirizacao\n");
+        ret = false;
+    }
+
+    if(custoRoteamento != solucao->getCustoRoteamento()){
+        printf("roteamento\n");
+        ret = false;
+    }
+
+    if(custoVeiculos != solucao->getCustoVeiculos()){
+        printf("veiculos\n");
+        ret = false;
+    }
+
+    if(custoRoteamento + custoTerceirizar + custoVeiculos != solucao->getValorSolucao()){
+        printf("total\n");
+        ret = false;
+    }
+
+    return ret;
+}
+
 //Testa todas as instâncias em uma pasta
-void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDestino){
+void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDestino, std::string nomeCsvTabela){
     std::vector<std::string> nomesArquivos; //Vector que terá o nome dos arquivos
 
     for (const auto& entry : std::filesystem::directory_iterator(nomePastaInstancias)) {
@@ -137,19 +193,36 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
     Solucao* solucao;
     RetornoGuloso* retornoGuloso;
 
-    for(std::string str : nomesArquivos){ //Em cada arquivo
-        std::cout << "Arquivo: " << str << "\n";
-        condicoes = leArquivo(nomePastaInstancias + "/" + str); //Lê o arquivo
+    std::vector<int> valoresOtimos{1029,2052,2040,1046,471,565,569,471
+    ,1672,3302,3301,1672,605,777,777,605,650,933,939,656,
+    801,1203,1208,802,934,1503,1510,932,428,506,559,408};
+
+    std::ofstream csv;
+    csv.open(nomeCsvTabela);
+    csv << "instancia,otimo,valorHeuristica,tempoHeuristica,gapHeuristica,valorVND,tempoVND,gapVND" << std::endl;
+
+
+    for(unsigned int i = 0; i < nomesArquivos.size(); i++){ //Em cada arquivo
+        std::string strCsv;
+        strCsv = nomesArquivos[i] + "," + std::to_string(valoresOtimos[i]) + ",";
+
+        std::cout << "Arquivo: " << nomesArquivos[i] << "Otimo: " << valoresOtimos[i] << "\n";
+        condicoes = leArquivo(nomePastaInstancias + "/" + nomesArquivos[i]); //Lê o arquivo
 
         if(condicoes == nullptr){ //Se houve algum erro na hora de criar as condições
             std::cout << "ERRO!\n";
             return;
         }
-
         retornoGuloso = algoritmoGuloso(condicoes); //Faz o algoritmo guloso
         solucao = retornoGuloso->solucao; 
 
         printf("\tTempo de Execucao Guloso: %.6fs\n", retornoGuloso->seconds);
+
+        char tempStr[10];
+        std::sprintf(tempStr, "%.6fs", retornoGuloso->seconds);
+
+        int valorHeuristica = solucao->getValorSolucao();
+        strCsv += std::to_string(valorHeuristica) + "," + tempStr + "," + std::to_string( (valorHeuristica - valoresOtimos[i])/(valoresOtimos[i]*1.0)*100 ) + ",";
 
         if(solucao == nullptr){ //Se algo der errado na criação da solução
             std::cout << "ERRO!\n";
@@ -158,11 +231,31 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
 
         double tempo = VND(condicoes, solucao);
 
+        std::sprintf(tempStr, "%.6fs", tempo);
+        valorHeuristica = solucao->getValorSolucao();
+        strCsv += std::to_string(valorHeuristica) + "," + tempStr + "," + std::to_string( (valorHeuristica - valoresOtimos[i])/(valoresOtimos[i]*1.0)*100 );
+
         printf("\tTempo de execucao VND: %.6fs\n", tempo);
 
-        escreveArquivo(nomePastaDestino + "/" + str, solucao); //Escreve no arquivo
+        // RetornoILS* retornoILS;
+        // retornoILS = ILS(condicoes,100);
+
+        // tempo = retornoILS->tempo;
+
+        bool certo = testaSolucao(solucao, condicoes);
+        if(!certo){
+            std::cout << "Solucao: " << nomesArquivos[i] << " esta errada!";
+        }
+
+        escreveArquivo(nomePastaDestino + "/" + nomesArquivos[i], solucao); //Escreve no arquivo
+
+        csv << strCsv << std::endl;
 
         delete condicoes;
         delete solucao;
+        delete retornoGuloso;
+        // delete retornoILS;
     }
+
+    csv.close();
 }

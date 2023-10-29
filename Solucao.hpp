@@ -21,6 +21,9 @@ class Solucao {
 
     public:
         Solucao();
+        
+        Solucao(Solucao* nova);
+        
         int getValorSolucao() const;
 
         int getCustoRoteamento() const;
@@ -63,6 +66,9 @@ class Solucao {
 
         //Remove uma rota das rotas
         void removeRota(int indice);
+
+        //Remove um dos clientes terceirizados
+        void removeClienteTerceirizado(int indice);
 
         
 };
