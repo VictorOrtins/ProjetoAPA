@@ -171,17 +171,10 @@ bool swapInterRotas(ProblemaCondicoes *condicoes, Solucao *solucao){
         rotas.at(rotaMelhorSwap1).setCustoRota(rotas.at(rotaMelhorSwap1).getCustoRota() + deltaRota1MelhorSwap);
         rotas.at(rotaMelhorSwap2).setCustoRota(rotas.at(rotaMelhorSwap2).getCustoRota() + deltaRota2MelhorSwap);
 
-        int melhorRota1 = rotas.at(rotaMelhorSwap1).getRota().at(melhorIndiceRota1);
-        int melhorRota2 = rotas.at(rotaMelhorSwap2).getRota().at(melhorIndiceRota2);
-
-        int demandaMelhorRota1 = demandas.at(melhorRota1 - 1);
-        int demandaMelhorRota2 = demandas.at(melhorRota2 - 1);
-
         rotas.at(rotaMelhorSwap1).setCapacidadeAtualRota(rotas.at(rotaMelhorSwap1).getCapacidadeAtualRota() + melhorCapacidadeDeltaRota1);
         rotas.at(rotaMelhorSwap2).setCapacidadeAtualRota(rotas.at(rotaMelhorSwap2).getCapacidadeAtualRota() + melhorCapacidadeDeltaRota2);
 
         solucao->setCustoRoteamento(solucao->getCustoRoteamento() + menorCustoSwap); //Atualiza o custo do roteamento
-        // printf("Final: %d %d\n", rotas.at(rotaMelhorSwap1).getCapacidadeAtualRota(), rotas.at(rotaMelhorSwap2).getCapacidadeAtualRota());
 
         return true; //Swap ocorreu
     }

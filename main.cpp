@@ -8,7 +8,7 @@
 int main(int argc, char* argv[]){
     /* Arquivo de teste */
     
-    // ProblemaCondicoes* condicoes = leArquivo("instancias/n199k17_A.txt"); //Lê o arquivo de instância
+    // ProblemaCondicoes* condicoes = leArquivo("instancias/n199k17_D.txt"); //Lê o arquivo de instância
     // if (condicoes == nullptr){ //Checa se houve algum problema em abrí-lo
     //     std::cout << "Problema na leitura do arquivo!\n";
     // }
@@ -18,20 +18,24 @@ int main(int argc, char* argv[]){
 
     // VND(condicoes, solucao);
 
-    // ILS(condicoes, 100);
+    // RetornoILS *retornoILS = ILS(condicoes, 1000);
 
-    // bool certo = testaSolucao(solucao, condicoes);
-    // if(!certo){
-    //     printf("Solucao errada!");
+    // solucao = retornoILS->solucao;
+
+    // solucao->printaSolucao();
+    // bool testa = testaSolucao(solucao, condicoes);
+    // if(!testa){
+    //     printf("Errado!!!");
     // }
 
-    // escreveArquivo("final.txt", solucao); //Escreve no arquivo final
+    // escreveArquivo("final2.txt", solucao); //Escreve no arquivo final
 
     // delete condicoes;
     // delete solucao;
     // delete retorno;
+    // delete retornoILS;
 
-    testeInstancias("instancias", "finalComVND", "resultados17.csv");
+    testeInstancias("instancias", "finalComVND", "resultados.csv");
 }
 
 

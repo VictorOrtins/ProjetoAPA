@@ -1,6 +1,7 @@
 #include "ils.hpp"
 #include "guloso.hpp"
 #include "vnd.hpp"
+#include "funcoes.hpp"
 #include <cstdlib>
 #include <ctime>
 #include <random>
@@ -26,10 +27,9 @@ RetornoILS* ILS(ProblemaCondicoes* condicoes, int maxIter){
             solucaoAtual = Solucao(&solucaoTemp);
         }
     }
+
     auto resultado = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - inicio);
     double seconds = static_cast<double>(resultado.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den;
-
-    solucaoAtual.printaSolucao();
 
     RetornoILS *retornoILS = new RetornoILS();
     retornoILS->solucao = new Solucao(&solucaoAtual);
@@ -39,11 +39,23 @@ RetornoILS* ILS(ProblemaCondicoes* condicoes, int maxIter){
 }
 
 void perturbacao(ProblemaCondicoes* condicoes, Solucao* solucao){
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
-    terceirizaAleatorio(condicoes, solucao);
+    std::uniform_int_distribution<> dist(1,5);
 
-    swapAleatorio(condicoes, solucao);
+    
+    for(int i = 0; i < dist(gen) + 1; i++){
+        swapInterRotasAleatorio(condicoes, solucao);
+    }
 
+    for(int i = 0; i < dist(gen) + 3; i++){
+        terceirizaAleatorio(condicoes, solucao);
+    }
+
+    for(int i = 0; i < dist(gen); i++){
+        swapAleatorio(condicoes, solucao);
+    }
 }
 
 
@@ -54,18 +66,14 @@ void swapAleatorio(ProblemaCondicoes* condicoes, Solucao* solucao){
     std::vector<Rota>& rotas = solucao->getRotas(); //Pega as rotas da solução
     std::vector<std::vector<int>>& custoCaminhos = condicoes->getCustoCaminho(); //Pega o custo de cada caminho
 
-    int indexRota = std::rand() % rotas.size();
-
     std::uniform_int_distribution<> dist(0,rotas.size() - 1);
+
+    int indexRota = dist(gen);
 
     std::vector<int> &rotaVector = rotas.at(indexRota).getRota();
 
     if(rotaVector.size() == 3){
-        if(rotas.size() == 1){
-            return;
-        }
-        indexRota = dist(gen);
-        rotaVector = rotas.at(indexRota).getRota();
+        return;
     }
 
     std::uniform_int_distribution<> dist2(1,rotaVector.size() - 2);
@@ -74,45 +82,79 @@ void swapAleatorio(ProblemaCondicoes* condicoes, Solucao* solucao){
     int indexVertice1 = dist2(gen);
     
     int indexVertice2 = dist2(gen);
-    while(indexVertice2 == indexVertice1){
-        indexVertice2 = dist2(gen);
+    if (indexVertice1 == indexVertice2){
+        return;
     }
 
-    int vertice1, verticeAntes1, verticeDepois1;
-    int vertice2, verticeAntes2, verticeDepois2;
-
-    vertice1 = rotaVector.at(indexVertice1);
-
-    verticeAntes1 = rotaVector.at(indexVertice1 - 1);
-    verticeDepois1 = rotaVector.at(indexVertice1 + 1);
-
-
-    vertice2 = rotaVector.at(indexVertice2);
-    verticeAntes2 = rotaVector.at(indexVertice2 - 1);
-    verticeDepois2 = rotaVector.at(indexVertice2 + 1);
-
-    int custoSwapDelta;
-
-    if(indexVertice2 == indexVertice1 + 1){ //Se os vértices são adjacentes. Há intersecção de arestas nesse caso, então o cálculo é menorr
-        custoSwapDelta = -custoCaminhos.at(verticeAntes1).at(vertice1) - custoCaminhos.at(vertice1).at(vertice2) 
-        - custoCaminhos.at(vertice2).at(verticeDepois2) +
-        custoCaminhos.at(verticeAntes1).at(vertice2) + custoCaminhos.at(vertice2).at(vertice1) 
-        + custoCaminhos.at(vertice1).at(verticeDepois2);
-
-        //-Ci-1,i - Ci,j - Cj,j+1 + Ci-1,j + Cj,i + Ci,j + 1
-    }
-    else{ //Se os vértices não são adjacentes
-        custoSwapDelta = -custoCaminhos.at(verticeAntes1).at(vertice1) - custoCaminhos.at(vertice1).at(verticeDepois1) 
-        - custoCaminhos.at(verticeAntes2).at(vertice2) - custoCaminhos.at(vertice2).at(verticeDepois2) +
-        custoCaminhos.at(verticeAntes1).at(vertice2) + custoCaminhos.at(vertice2).at(verticeDepois1) 
-        + custoCaminhos.at(verticeAntes2).at(vertice1) + custoCaminhos.at(vertice1).at(verticeDepois2);
-
-        //-Ci-1,i - Ci,i+1 - Cj-1,j - Cj,j+1 + Ci-1,j Cj,i+1 + Cj-1,i = Ci,j+1
-    }
-
+    int custoAntes = rotas.at(indexRota).getCustoRota();
     trocaVertices(indexVertice1, indexVertice2, rotaVector); //Faz a troca dos vértices
-    rotas.at(indexRota).setCustoRota(rotas.at(indexRota).getCustoRota() + custoSwapDelta); //Atualiza o custo da rota
-    solucao->setCustoRoteamento(solucao->getCustoRoteamento() + custoSwapDelta); //Custo do roteamento é atualizado
+
+    int custoDepois = 0;
+    for(unsigned int i = 0; i < rotaVector.size() - 1; i++){
+        custoDepois += custoCaminhos.at(rotaVector.at(i)).at(rotaVector.at(i+1));
+    }
+
+    rotas.at(indexRota).setCustoRota(custoDepois); //Atualiza o custo da rota
+    solucao->setCustoRoteamento(solucao->getCustoRoteamento() + custoDepois - custoAntes); //Custo do roteamento é atualizado
+}
+
+void swapInterRotasAleatorio(ProblemaCondicoes* condicoes, Solucao* solucao){
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::vector<Rota> &rotas = solucao->getRotas(); //Pega as rotas da solução
+    std::vector<std::vector<int>> &custoCaminhos = condicoes->getCustoCaminho(); //Pega o custo de cada caminho
+    std::vector<int> &demandas = condicoes->getDemandaClientes();
+    int capacidadeMaximaVeiculo = condicoes->getCapacidadeVeiculo();
+
+    std::uniform_int_distribution<> dist(0,rotas.size() - 1);
+
+    int indexRota1 = dist(gen);
+    int indexRota2 = dist(gen);
+    if(indexRota1 == indexRota2){
+        return;
+    }
+
+    std::vector<int> &rota1Vector = rotas.at(indexRota1).getRota();
+    std::vector<int> &rota2Vector = rotas.at(indexRota2).getRota();
+
+    std::uniform_int_distribution<> dist2(1,rota1Vector.size() - 2);
+    int indexVerticeRota1 = dist2(gen);
+
+    std::uniform_int_distribution<> dist3(1,rota2Vector.size() - 2);
+    int indexVerticeRota2 = dist3(gen);
+
+    int deltaCapacidadeRota1 = - demandas.at(rota1Vector.at(indexVerticeRota1) - 1) + demandas.at(rota2Vector.at(indexVerticeRota2) - 1);
+    int deltaCapacidadeRota2 = + demandas.at(rota1Vector.at(indexVerticeRota1) - 1) - demandas.at(rota2Vector.at(indexVerticeRota2) - 1);
+
+    if( (rotas.at(indexRota1).getCapacidadeAtualRota() + deltaCapacidadeRota1) > capacidadeMaximaVeiculo
+    || (rotas.at(indexRota2).getCapacidadeAtualRota() + deltaCapacidadeRota2) > capacidadeMaximaVeiculo){
+        return;
+    }
+
+    int custoAntesRota1 = rotas.at(indexRota1).getCustoRota();
+    int custoAntesRota2 = rotas.at(indexRota2).getCustoRota();
+
+    trocaInterRota(indexVerticeRota1, indexVerticeRota2, rota1Vector, rota2Vector);
+
+    int custoDepoisRota1 = 0;
+    int custoDepoisRota2 = 0;
+
+    for(unsigned int i = 0; i < rota1Vector.size() - 1; i++){
+        custoDepoisRota1 += custoCaminhos.at(rota1Vector.at(i)).at(rota1Vector.at(i + 1));
+    }
+
+    for(unsigned int i = 0; i < rota2Vector.size() - 1; i++){
+        custoDepoisRota2 += custoCaminhos.at(rota2Vector.at(i)).at(rota2Vector.at(i + 1));
+    }
+
+    rotas.at(indexRota1).setCustoRota(custoDepoisRota1);
+    rotas.at(indexRota2).setCustoRota(custoDepoisRota2);
+
+    rotas.at(indexRota1).setCapacidadeAtualRota(rotas.at(indexRota1).getCapacidadeAtualRota() + deltaCapacidadeRota1);
+    rotas.at(indexRota2).setCapacidadeAtualRota(rotas.at(indexRota2).getCapacidadeAtualRota() + deltaCapacidadeRota2);
+
+    solucao->setCustoRoteamento(solucao->getCustoRoteamento() + custoDepoisRota1 - custoAntesRota1 + custoDepoisRota2 - custoAntesRota2);
 }
 
 

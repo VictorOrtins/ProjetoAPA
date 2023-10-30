@@ -145,7 +145,7 @@ bool testaSolucao(Solucao* solucao, ProblemaCondicoes* condicoes){
         }
 
         if(capacidadeRota > condicoes->getCapacidadeVeiculo()){
-            printf("Capacidade\n");
+            printf("\tCapacidade\n");
             ret = false;
         }
 
@@ -157,22 +157,27 @@ bool testaSolucao(Solucao* solucao, ProblemaCondicoes* condicoes){
     }
 
     if(custoTerceirizar != solucao->getCustoTerceirizacao()){
-        printf("terceirizacao\n");
+        printf("\tterceirizacao\n");
         ret = false;
     }
 
     if(custoRoteamento != solucao->getCustoRoteamento()){
-        printf("roteamento\n");
+        printf("\troteamento\n");
         ret = false;
     }
 
     if(custoVeiculos != solucao->getCustoVeiculos()){
-        printf("veiculos\n");
+        printf("\tveiculos\n");
         ret = false;
     }
 
     if(custoRoteamento + custoTerceirizar + custoVeiculos != solucao->getValorSolucao()){
-        printf("total\n");
+        printf("\ttotal\n");
+        ret = false;
+    }
+
+    if(condicoes->getMinimoEntregas() > solucao->getEntregasNaoTerceirizadas()){
+        printf("\tMinimo Entregas\n");
         ret = false;
     }
 
@@ -199,7 +204,7 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
 
     std::ofstream csv;
     csv.open(nomeCsvTabela);
-    csv << "instancia,otimo,valorHeuristica,tempoHeuristica,gapHeuristica,valorVND,tempoVND,gapVND" << std::endl;
+    csv << "instancia,otimo,valorHeuristica,tempoHeuristica,gapHeuristica,valorVND,tempoVND,gapVND,valorILS,tempoILS,gapILS" << std::endl;
 
 
     for(unsigned int i = 0; i < nomesArquivos.size(); i++){ //Em cada arquivo
@@ -233,14 +238,20 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
 
         std::sprintf(tempStr, "%.6fs", tempo);
         valorHeuristica = solucao->getValorSolucao();
-        strCsv += std::to_string(valorHeuristica) + "," + tempStr + "," + std::to_string( (valorHeuristica - valoresOtimos[i])/(valoresOtimos[i]*1.0)*100 );
+        strCsv += std::to_string(valorHeuristica) + "," + tempStr + "," + std::to_string( (valorHeuristica - valoresOtimos[i])/(valoresOtimos[i]*1.0)*100 ) + ",";
 
         printf("\tTempo de execucao VND: %.6fs\n", tempo);
 
-        // RetornoILS* retornoILS;
-        // retornoILS = ILS(condicoes,100);
+        RetornoILS* retornoILS;
+        retornoILS = ILS(condicoes,200);
 
-        // tempo = retornoILS->tempo;
+        tempo = retornoILS->tempo;
+        solucao = retornoILS->solucao;
+
+        std::sprintf(tempStr, "%.6fs", tempo);
+        valorHeuristica = solucao->getValorSolucao();
+        strCsv += std::to_string(valorHeuristica) + "," + tempStr + "," + std::to_string( (valorHeuristica - valoresOtimos[i])/(valoresOtimos[i]*1.0)*100 );
+
 
         bool certo = testaSolucao(solucao, condicoes);
         if(!certo){
@@ -254,7 +265,8 @@ void testeInstancias(std::string nomePastaInstancias, std::string nomePastaDesti
         delete condicoes;
         delete solucao;
         delete retornoGuloso;
-        // delete retornoILS;
+        delete retornoILS;
+        std::cout << std::endl;
     }
 
     csv.close();

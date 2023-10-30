@@ -11,7 +11,7 @@ endif
 
 # Compiler settings - Can be customized.
 CC = g++
-CXXFLAGS = -O3 -std=c++17 -Wall
+CXXFLAGS = -O3 -std=c++17 -Wall -lstdc++fs
 LDFLAGS = 
 
 # Makefile settings - Can be customized.
@@ -28,7 +28,6 @@ RM = rm
 DELOBJ = $(OBJ)
 # Windows OS variables & settings
 DEL = del
-EXE = .exe
 WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
 ########################################################################

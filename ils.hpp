@@ -14,6 +14,8 @@ void perturbacao(ProblemaCondicoes* condicoes, Solucao* solucao);
 
 void swapAleatorio(ProblemaCondicoes* condicoes, Solucao* solucao);
 
+void swapInterRotasAleatorio(ProblemaCondicoes* condicoes, Solucao* solucao);
+
 void terceirizaAleatorio(ProblemaCondicoes* condicoes, Solucao* solucao);
 
 void perturbacao(ProblemaCondicoes* condicoes, Solucao* solucao);
